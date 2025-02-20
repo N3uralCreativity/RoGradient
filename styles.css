@@ -1,4 +1,4 @@
-/* 1) Full-screen background animation */
+/* 1) Basic background & layout */
 html, body {
   margin: 0;
   padding: 0;
@@ -10,9 +10,9 @@ html, body {
 }
 
 @keyframes gradientBG {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100%{ background-position: 0% 50%; }
 }
 
 .main-container {
@@ -23,7 +23,6 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   text-align: center;
   padding: 40px 20px;
   box-sizing: border-box;
@@ -34,7 +33,7 @@ h1, p, h2 {
   margin: 10px 0;
 }
 
-/* 2) Fancy button styling */
+/* 2) Buttons */
 .fancy-btn, .confirm-btn {
   background: #ff9900;
   border: none;
@@ -44,12 +43,11 @@ h1, p, h2 {
   margin: 10px 5px;
   cursor: pointer;
   border-radius: 4px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .fancy-btn:hover, .confirm-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(255, 153, 0, 0.7);
+  box-shadow: 0 0 10px rgba(255,153,0,0.7);
 }
 
 input[type="text"] {
@@ -59,7 +57,7 @@ input[type="text"] {
   border: 1px solid #ccc;
 }
 
-/* 3) messageBox for success/error */
+/* 3) messageBox for success or error */
 .message-box {
   width: 100%;
   max-width: 500px;
@@ -67,13 +65,13 @@ input[type="text"] {
   border-radius: 4px;
   text-align: left;
   padding: 10px;
-  box-sizing: border-box;
   color: #fff;
-  background-color: rgba(76, 175, 80, 0.3); 
+  background-color: rgba(76,175,80,0.3);
   border: 1px solid #4caf50;
+  box-sizing: border-box;
 }
 
-/* Hidden by default */
+/* Hide by default */
 .hidden {
   display: none;
 }
@@ -81,8 +79,8 @@ input[type="text"] {
 /* 4) The "Is this you?" container */
 .player-check {
   margin-top: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 4px;
   padding: 20px;
   width: 100%;
@@ -107,7 +105,4 @@ input[type="text"] {
 }
 
 #gradientOutput {
-  white-space: pre-wrap;
-  font-family: monospace;
-  margin: 0;
-}
+  white-space: 
