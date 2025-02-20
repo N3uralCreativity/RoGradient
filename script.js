@@ -3,7 +3,7 @@ const output = document.getElementById("output");
 const binIdInput = document.getElementById("binIdInput");
 
 // We'll assume you're using a public bin, so no key needed for read:
-const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/bins/";
+const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b";
 
 retrieveBtn.addEventListener("click", async () => {
   // Clear & hide the output if it was visible
