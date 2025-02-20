@@ -31,6 +31,10 @@ html, body {
   box-sizing: border-box;
 }
 
+h1, p {
+  color: #fff;
+}
+
 /* 3) Fade-in effect for elements */
 .fade-in {
   opacity: 0;
