@@ -1,0 +1,96 @@
+/* 1) Full-screen animated gradient background */
+html, body {
+  margin: 0; 
+  padding: 0; 
+  height: 100%;
+  font-family: "Open Sans", sans-serif;
+  background: linear-gradient(-45deg, #1e3f20, #0C2D26, #39CCCC, #7FDBFF);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+}
+
+/* Keyframes for the shifting background */
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 2) Center container */
+.main-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+/* 3) Fade-in effect for elements */
+.fade-in {
+  opacity: 0;
+  animation: fadeInAnimation 1s forwards;
+  /* Stagger start for some "cascade" vibe */
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeInAnimation {
+  to { opacity: 1; }
+}
+
+/* 4) Fancy button styling & hover animation */
+.fancy-btn {
+  background: #ff9900;
+  border: none;
+  color: #fff;
+  padding: 12px 24px;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fancy-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(255, 153, 0, 0.7);
+}
+
+/* 5) The output box styling */
+#output {
+  width: 80%;
+  max-width: 500px;
+  min-height: 100px;
+  margin-top: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fefefe;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 4px;
+  padding: 10px;
+  text-align: left;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: monospace;
+  transition: all 0.3s ease;
+}
+
+/* Hidden by default (we fade it in upon retrieval) */
+.hidden {
+  display: none;
+}
+
+/* Pulse animation to highlight newly retrieved data */
+@keyframes pulseOutput {
+  0% { box-shadow: 0 0 0px 0 rgba(255,255,255,0.6); }
+  50% { box-shadow: 0 0 12px 5px rgba(255,255,255,0.2); }
+  100% { box-shadow: 0 0 0px 0 rgba(255,255,255,0.6); }
+}
+
+#output.pulse {
+  animation: pulseOutput 1s ease forwards;
+}
