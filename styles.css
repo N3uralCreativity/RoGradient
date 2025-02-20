@@ -1,4 +1,4 @@
-/* 1) Basic full-screen gradient background + font */
+/* 1) Full-screen background animation */
 html, body {
   margin: 0;
   padding: 0;
@@ -8,13 +8,13 @@ html, body {
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
 }
+
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* 2) Center container */
 .main-container {
   width: 100%;
   max-width: 600px;
@@ -29,12 +29,12 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Headings + text color */
 h1, p, h2 {
   color: #fff;
+  margin: 10px 0;
 }
 
-/* The fancy button styling */
+/* 2) Fancy button styling */
 .fancy-btn, .confirm-btn {
   background: #ff9900;
   border: none;
@@ -46,6 +46,7 @@ h1, p, h2 {
   border-radius: 4px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .fancy-btn:hover, .confirm-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 10px rgba(255, 153, 0, 0.7);
@@ -58,7 +59,7 @@ input[type="text"] {
   border: 1px solid #ccc;
 }
 
-/* 3) The message box (for success/error) */
+/* 3) messageBox for success/error */
 .message-box {
   width: 100%;
   max-width: 500px;
@@ -67,19 +68,17 @@ input[type="text"] {
   text-align: left;
   padding: 10px;
   box-sizing: border-box;
-  background-color: rgba(76, 175, 80, 0.3);
+  color: #fff;
+  background-color: rgba(76, 175, 80, 0.3); 
   border: 1px solid #4caf50;
-  color: #fefefe;
 }
-
-/* For .error vs .success you might define separate classes if you want. */
 
 /* Hidden by default */
 .hidden {
   display: none;
 }
 
-/* 4) The player check container */
+/* 4) The "Is this you?" container */
 .player-check {
   margin-top: 20px;
   background: rgba(255, 255, 255, 0.1);
@@ -90,15 +89,11 @@ input[type="text"] {
   max-width: 400px;
 }
 
-/* The avatar image */
-.avatar {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  border-radius: 8px;
+#playerInfoP {
+  color: #fff;
 }
 
-/* 5) Gradient container for final data */
+/* 5) The final gradient container */
 .gradient-container {
   margin-top: 20px;
   width: 100%;
