@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="utf-8" />
   <title>Gradient Export Viewer</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
 </head>
 <body>
   <div class="main-container">
-    <h1 class="fade-in">View Exported Gradient</h1>
-    <p class="fade-in">Enter your Bin ID:</p>
-    <input type="text" id="binIdInput" class="fade-in" placeholder="e.g. 63daa..." />
-    <button id="retrieveBtn" class="fancy-btn fade-in">Retrieve</button>
-    <pre id="output" class="fade-in hidden"></pre>
+    <h1>View Exported Gradient</h1>
+    <p>Enter your Bin ID:</p>
+    <input type="text" id="binIdInput" placeholder="e.g. 63daa..." />
+    <button id="retrieveBtn" class="fancy-btn">Retrieve</button>
+
+    <!-- The box that shows success or error messages -->
+    <div id="messageBox" class="message-box hidden">
+      <pre id="output"></pre>
+    </div>
   </div>
 </body>
 </html>
