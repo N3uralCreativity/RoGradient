@@ -1,29 +1,46 @@
-const serverUrl = "https://api.jsonbin.io/v3/bins"; 
-// We only need the base, we'll append `/<binId>`.
-
 const retrieveBtn = document.getElementById("retrieveBtn");
 const output = document.getElementById("output");
+const binIdInput = document.getElementById("binIdInput");
+
+// We'll assume you're using a public bin, so no key needed for read:
+const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/bins/";
 
 retrieveBtn.addEventListener("click", async () => {
-  const binId = document.getElementById("binIdInput").value.trim();
-  if (!binId) {
-    output.textContent = "No ID entered";
+  // Clear & hide the output if it was visible
+  output.classList.add("hidden");
+  output.textContent = "";
+
+  const binId = binIdInput.value.trim();
+  if(!binId) {
+    alert("Please enter a bin ID!");
     return;
   }
 
+  // Show "Loading..."
+  output.textContent = "Loading...";
+  output.classList.remove("hidden");
+
   try {
-    output.textContent = "Loading...";
-    // For a public bin, no need for X-ACCESS-KEY
-    const url = `${serverUrl}/${encodeURIComponent(binId)}`;
+    // GET request to JSONbin
+    const url = `${JSONBIN_BASE_URL}${encodeURIComponent(binId)}`;
     const resp = await fetch(url);
-    if (!resp.ok) {
-      output.textContent = `Error fetching bin: ${resp.status}`;
+    if(!resp.ok) {
+      output.textContent = "Error: bin not found or server error.";
       return;
     }
     const json = await resp.json();
-    // 'json.record.gradientData' is what you stored
-    output.textContent = `Gradient Data:\n${json.record.gradientData}`;
-  } catch (err) {
-    output.textContent = `Error: ${err}`;
+
+    // Display retrieved data 
+    // (json.record.gradientData is what you stored in Roblox)
+    output.textContent = "Retrieved Data:\n" + json.record.gradientData;
+
+    // Animate a "pulse" highlight
+    output.classList.remove("pulse"); 
+    // Force reflow so we can restart the animation
+    void output.offsetWidth; 
+    output.classList.add("pulse");
+
+  } catch(err) {
+    output.textContent = "Network/Fetch error:\n" + err;
   }
 });
