@@ -1,72 +1,83 @@
-// Grab elements from the DOM
 const retrieveBtn = document.getElementById("retrieveBtn");
-const output = document.getElementById("output");
 const binIdInput = document.getElementById("binIdInput");
+const messageBox = document.getElementById("messageBox");
+const output = document.getElementById("output");
 
-// If your public bins are on JSONbin's v3 "b" route:
+// For v3 "b" route:
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
 
+// On click, fetch from JSONbin
 retrieveBtn.addEventListener("click", async () => {
-  // Hide old output
-  output.classList.add("hidden");
+  // Hide old message, reset classes
+  messageBox.className = "message-box hidden"; 
+  output.classList.remove("pulse");
   output.textContent = "";
 
-  // Get the user-input bin ID
   const binId = binIdInput.value.trim();
   if (!binId) {
-    alert("Please enter a bin ID!");
+    // Show an error if binId is empty
+    messageBox.classList.remove("hidden");
+    messageBox.classList.add("error");
+    output.textContent = "Please enter a Bin ID!";
     return;
   }
 
-  // Show "Loading..."
+  // Show a "Loading..." in success style or error style?
+  // We'll do success style for now, so user sees a green box:
+  messageBox.classList.remove("hidden");
+  messageBox.classList.add("success");
   output.textContent = "Loading...";
-  output.classList.remove("hidden");
 
   try {
-    // Build the GET url
     const url = `${JSONBIN_BASE_URL}${encodeURIComponent(binId)}`;
-    console.log("Fetching from URL:", url);
+    console.log("Fetching from:", url);
 
     const resp = await fetch(url);
     if (!resp.ok) {
-      output.textContent = `Error: bin not found or server error (Status ${resp.status}).`;
-      console.error("Fetch response not OK:", resp);
+      // If 404 or other error, show in .error style
+      messageBox.classList.remove("success");
+      messageBox.classList.add("error");
+
+      output.textContent = `Error: bin not found or server error. (Status ${resp.status})`;
       return;
     }
 
-    // Parse JSON
     const json = await resp.json();
-    console.log("Raw JSONbin response:", json);
+    console.log("JSONbin response:", json);
 
-    // The data is typically in json.record if you're using v3
-    // For example, if you stored { gradientData = "...some data..." }
-    // in Roblox, you retrieve that from json.record.gradientData
+    // Typically in v3, data is at json.record
     if (!json.record) {
-      output.textContent = "No 'record' field found in returned JSON.";
-      console.warn("No record field in JSON:", json);
+      // Possibly a malformed response
+      messageBox.classList.remove("success");
+      messageBox.classList.add("error");
+      output.textContent = "No 'record' field in returned JSON.";
       return;
     }
 
-    // Let's assume the property is "gradientData":
+    // If you stored { gradientData = "...some data..." }
     const dataStr = json.record.gradientData;
-    console.log("gradientData value:", dataStr);
-
     if (dataStr === undefined) {
-      output.textContent = "No 'gradientData' found in json.record.";
+      messageBox.classList.remove("success");
+      messageBox.classList.add("error");
+      output.textContent = "No 'gradientData' property found in record.";
       return;
     }
 
-    // Display the final result
-    output.textContent = "Retrieved Data:\n" + dataStr;
+    // If success, show final data
+    messageBox.classList.remove("error");
+    messageBox.classList.add("success");
+    output.textContent = `Retrieved Data:\n${dataStr}`;
 
-    // "Pulse" highlight animation
+    // Animate pulse
     output.classList.remove("pulse");
-    void output.offsetWidth; // reflow trick to restart animation
+    void output.offsetWidth; // reflow
     output.classList.add("pulse");
 
   } catch (err) {
-    // If network or some other error
-    output.textContent = "Network/Fetch error:\n" + err;
-    console.error("Error in fetch try/catch:", err);
+    // network error or fetch error
+    messageBox.classList.remove("success");
+    messageBox.classList.add("error");
+    output.textContent = `Network or fetch error:\n${err}`;
+    console.error(err);
   }
 });
