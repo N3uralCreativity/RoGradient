@@ -37,4 +37,74 @@ retrieveBtn.addEventListener("click", async () => {
     console.log("JSONbin response:", json);
 
     if (!json.record) {
-      showError("
+      showError("No 'record' field in returned JSON.");
+      return;
+    }
+
+    // We expect record = { playerName, playerId, gradientData }
+    const record = json.record;
+    const playerName = record.playerName;
+    const playerId = record.playerId;
+    const gradientData = record.gradientData;
+
+    if (playerName === undefined) {
+      showError("No 'playerName' found in record. Can't identify player.");
+      return;
+    }
+    if (playerId === undefined) {
+      showError("No 'playerId' found in record. Can't identify player.");
+      return;
+    }
+    if (gradientData === undefined) {
+      showError("No 'gradientData' found in the record.");
+      return;
+    }
+
+    // Show "Is this you?" 
+    playerInfoP.textContent = `Name: ${playerName}\nID: ${playerId}`;
+    playerCheckContainer.classList.remove("hidden");
+
+    yesBtn.onclick = () => {
+      gradientOutput.textContent = gradientData;
+      gradientContainer.classList.remove("hidden");
+      playerCheckContainer.classList.add("hidden");
+    };
+
+    noBtn.onclick = () => {
+      showError("You indicated this is not your gradient. Exiting display.");
+      playerCheckContainer.classList.add("hidden");
+    };
+
+  } catch (err) {
+    showError("Network or fetch error:\n" + err);
+    console.error(err);
+  }
+});
+
+/** Clears old states */
+function resetUI() {
+  messageBox.classList.add("hidden");
+  output.textContent = "";
+
+  playerCheckContainer.classList.add("hidden");
+  playerInfoP.textContent = "";
+
+  gradientContainer.classList.add("hidden");
+  gradientOutput.textContent = "";
+}
+
+/** Show a success/loading message in the box */
+function showMessage(msg) {
+  messageBox.classList.remove("hidden");
+  messageBox.classList.remove("error");
+  messageBox.classList.add("success");
+  output.textContent = msg;
+}
+
+/** Show an error message in the box */
+function showError(msg) {
+  messageBox.classList.remove("hidden");
+  messageBox.classList.remove("success");
+  messageBox.classList.add("error");
+  output.textContent = msg;
+}
