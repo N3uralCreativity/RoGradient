@@ -1,22 +1,20 @@
-/* 1) Full-screen animated gradient background */
+/* 1) Basic page styling + background */
 html, body {
   margin: 0; 
   padding: 0; 
   height: 100%;
-  font-family: "Open Sans", sans-serif;
+  font-family: "Arial", sans-serif;
   background: linear-gradient(-45deg, #1e3f20, #0C2D26, #39CCCC, #7FDBFF);
   background-size: 400% 400%;
   animation: gradientBG 15s ease infinite;
 }
 
-/* Keyframes for the shifting background */
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* 2) Center container */
 .main-container {
   width: 100%;
   max-width: 600px;
@@ -31,30 +29,20 @@ html, body {
   box-sizing: border-box;
 }
 
+/* 2) Title + text = white */
 h1, p {
   color: #fff;
+  margin: 10px 0;
 }
 
-/* 3) Fade-in effect for elements */
-.fade-in {
-  opacity: 0;
-  animation: fadeInAnimation 1s forwards;
-  /* Stagger start for some "cascade" vibe */
-  animation-delay: 0.2s;
-}
-
-@keyframes fadeInAnimation {
-  to { opacity: 1; }
-}
-
-/* 4) Fancy button styling & hover animation */
+/* 3) Fancy button */
 .fancy-btn {
   background: #ff9900;
   border: none;
   color: #fff;
   padding: 12px 24px;
   font-size: 16px;
-  margin-top: 10px;
+  margin-top: 12px;
   cursor: pointer;
   border-radius: 4px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -65,36 +53,57 @@ h1, p {
   box-shadow: 0 0 10px rgba(255, 153, 0, 0.7);
 }
 
-/* 5) The output box styling */
-#output {
-  width: 80%;
-  max-width: 500px;
-  min-height: 100px;
-  margin-top: 20px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fefefe;
-  border: 1px solid rgba(255,255,255,0.3);
+input[type="text"] {
+  padding: 8px;
+  font-size: 14px;
   border-radius: 4px;
-  padding: 10px;
-  text-align: left;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: monospace;
-  transition: all 0.3s ease;
+  border: 1px solid #ccc;
 }
 
-/* Hidden by default (we fade it in upon retrieval) */
+/* 4) The message box (for success/error) */
+.message-box {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 20px;
+  border-radius: 4px;
+  text-align: left;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+/* .hidden = display none */
 .hidden {
   display: none;
 }
 
-/* Pulse animation to highlight newly retrieved data */
+/* .success style -> greenish background */
+.success {
+  background-color: rgba(76, 175, 80, 0.3);
+  border: 1px solid #4caf50;
+  color: #fefefe;
+}
+
+/* .error style -> redish background */
+.error {
+  background-color: rgba(244, 67, 54, 0.3);
+  border: 1px solid #f44336;
+  color: #fff;
+}
+
+/* The <pre> for the data text */
+#output {
+  white-space: pre-wrap;
+  font-family: monospace;
+  margin: 0;
+}
+
+/* Pulse highlight on success retrieval (optional) */
 @keyframes pulseOutput {
   0% { box-shadow: 0 0 0px 0 rgba(255,255,255,0.6); }
   50% { box-shadow: 0 0 12px 5px rgba(255,255,255,0.2); }
   100% { box-shadow: 0 0 0px 0 rgba(255,255,255,0.6); }
 }
 
-#output.pulse {
+.pulse {
   animation: pulseOutput 1s ease forwards;
 }
