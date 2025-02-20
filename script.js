@@ -1,8 +1,10 @@
 const retrieveBtn = document.getElementById("retrieveBtn");
 const binIdInput = document.getElementById("binIdInput");
 
+
 const messageBox = document.getElementById("messageBox");
 const output = document.getElementById("output");
+
 
 const playerCheckContainer = document.getElementById("playerCheckContainer");
 const playerInfoP = document.getElementById("playerInfoP");
@@ -11,6 +13,7 @@ const noBtn = document.getElementById("noBtn");
 
 const gradientContainer = document.getElementById("gradientContainer");
 const gradientOutput = document.getElementById("gradientOutput");
+
 
 // JSONbin v3 "b" route
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
