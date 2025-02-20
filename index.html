@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <title>Gradient Export Viewer</title>
   <link rel="stylesheet" href="styles.css" />
   <script defer src="script.js"></script>
@@ -13,9 +13,24 @@
     <input type="text" id="binIdInput" placeholder="e.g. 63daa..." />
     <button id="retrieveBtn" class="fancy-btn">Retrieve</button>
 
-    <!-- The box that shows success or error messages -->
+    <!-- The main message box for success/error -->
     <div id="messageBox" class="message-box hidden">
       <pre id="output"></pre>
+    </div>
+
+    <!-- The "Is this you?" container, hidden by default -->
+    <div id="playerCheckContainer" class="player-check hidden">
+      <img id="playerAvatar" class="avatar" />
+      <p id="playerName"></p>
+      <p>Is this you?</p>
+      <button id="yesBtn" class="confirm-btn">Yes</button>
+      <button id="noBtn" class="confirm-btn">No</button>
+    </div>
+
+    <!-- The final gradient data container -->
+    <div id="gradientContainer" class="gradient-container hidden">
+      <h2>Gradient Data</h2>
+      <pre id="gradientOutput"></pre>
     </div>
   </div>
 </body>
