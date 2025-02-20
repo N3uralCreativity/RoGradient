@@ -13,21 +13,20 @@
     <input type="text" id="binIdInput" placeholder="e.g. 63daa..." />
     <button id="retrieveBtn" class="fancy-btn">Retrieve</button>
 
-    <!-- The main message box for success/error -->
+    <!-- Main status/error message box -->
     <div id="messageBox" class="message-box hidden">
       <pre id="output"></pre>
     </div>
 
-    <!-- The "Is this you?" container, hidden by default -->
+    <!-- "Is this you?" prompt container -->
     <div id="playerCheckContainer" class="player-check hidden">
-      <img id="playerAvatar" class="avatar" />
-      <p id="playerName"></p>
+      <p id="playerInfoP"></p>
       <p>Is this you?</p>
       <button id="yesBtn" class="confirm-btn">Yes</button>
       <button id="noBtn" class="confirm-btn">No</button>
     </div>
 
-    <!-- The final gradient data container -->
+    <!-- Final gradient data container -->
     <div id="gradientContainer" class="gradient-container hidden">
       <h2>Gradient Data</h2>
       <pre id="gradientOutput"></pre>
