@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Gradient Export Viewer</title>
+  <style>
+    body { font-family: sans-serif; }
+    #output { white-space: pre; border: 1px solid #ccc; padding: 10px; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <h1>View Exported Gradient</h1>
+  <p>Enter Gradient ID:</p>
+  <input type="text" id="gradientIdInput" placeholder="XYZ-123" />
+  <button id="retrieveBtn">Retrieve</button>
+
+  <div id="output"></div>
+
+  <script>
+    const retrieveBtn = document.getElementById("retrieveBtn");
+    const output = document.getElementById("output");
+
+    retrieveBtn.addEventListener("click", async () => {
+      const id = document.getElementById("gradientIdInput").value;
+      if(!id) return;
+
+      output.textContent = "Loading...";
+      try {
+        const resp = await fetch(`/api/getGradient/${encodeURIComponent(id)}`);
+        if(!resp.ok) {
+          output.textContent = "Not found or error retrieving data.";
+        } else {
+          const json = await resp.json();
+          output.textContent = "Gradient Data:\n" + json.gradientData;
+        }
+      } catch(err) {
+        output.textContent = "Error: " + err;
+      }
+    });
+  </script>
+</body>
+</html>
