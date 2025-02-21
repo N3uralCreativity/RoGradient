@@ -8,15 +8,14 @@ html, body {
   width: 100%;
   height: 100%;
   font-family: "Open Sans", sans-serif;
-  overflow: hidden; /* On gère le scroll autrement si besoin */
+  overflow: hidden;
 }
 
-/* 1) Arrière-plan animé */
+/* Arrière-plan animé */
 .bg-animations {
   position: fixed;
   top: 0; left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   background: linear-gradient(-45deg,
     rgba(30,63,32,0.8),
     rgba(12,45,38,0.8),
@@ -27,14 +26,13 @@ html, body {
   z-index: -1;
   animation: bgFlow 15s ease infinite;
 }
-
 @keyframes bgFlow {
   0%   { background-position: 0% 50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* 2) Conteneur principal */
+/* Conteneur principal */
 .main-container {
   position: relative;
   display: flex;
@@ -44,10 +42,10 @@ html, body {
   width: 100%;
   height: 100%;
   padding: 40px 20px;
-  overflow-y: auto; /* si le contenu dépasse */
+  overflow-y: auto;
 }
 
-/* Titres + sous-titres */
+/* Titres + sous-titre */
 h1 {
   color: #fff;
   margin-bottom: 8px;
@@ -61,6 +59,8 @@ h1 {
   opacity: 0;
   transform: translateY(-10px);
 }
+
+/* Animations "fade-in" */
 @keyframes fadeInUp {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -68,7 +68,7 @@ h1 {
   animation: fadeInUp 1s forwards;
 }
 
-/* 3) Ligne d'entrée + bouton */
+/* Ligne input + bouton */
 .input-row {
   display: flex;
   align-items: center;
@@ -76,6 +76,9 @@ h1 {
   margin-bottom: 24px;
   opacity: 0;
   transform: translateY(-10px);
+  /* On peut réutiliser fadeInUp en "animation: fadeInUp 1s forwards" si on veut */
+  animation: fadeInUp 1s forwards;
+  animation-delay: 0.5s;
 }
 #binIdInput {
   min-width: 220px;
@@ -88,7 +91,7 @@ h1 {
   background-color: #ff9900;
 }
 
-/* 4) Style général des boutons */
+/* Style général des boutons */
 .btn {
   padding: 10px 16px;
   font-size: 15px;
@@ -104,7 +107,7 @@ h1 {
   box-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
-/* 5) Notifications (messages, chargement, etc.) */
+/* Notification box (loading/erreur/etc.) */
 .notification {
   width: 90%;
   max-width: 500px;
@@ -121,14 +124,21 @@ h1 {
   opacity: 0;
   transform: translateY(-20px);
 }
-@keyframes fadeSlideIn {
-  to { opacity: 1; transform: translateY(0); }
-}
+
+/* Is hidden by default (display: none). */
 .hidden {
   display: none;
 }
 
-/* 6) Section "Is this you ?" */
+/* Animation pour notification, "slide-in" */
+@keyframes fadeSlideIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* "Is this you ?" container */
 .player-check {
   width: 90%;
   max-width: 400px;
@@ -157,7 +167,7 @@ h1 {
   gap: 10px;
 }
 
-/* 7) Conteneur des données du gradient */
+/* Final gradient data */
 .gradient-data {
   width: 90%;
   max-width: 500px;
@@ -181,7 +191,7 @@ h1 {
   margin: 0;
 }
 
-/* 8) Petit effet "pulse" qu'on peut ajouter via JS */
+/* Petit effet "pulse" */
 @keyframes pulse {
   0%   { box-shadow: 0 0 0px 0 rgba(255,255,255,0.7); }
   50%  { box-shadow: 0 0 15px 5px rgba(255,255,255,0.3); }
