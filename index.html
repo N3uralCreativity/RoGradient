@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <title>Gradient Export Viewer</title>
   <link rel="stylesheet" href="styles.css" />
-  <script defer src="ScriptV2.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
   <div class="bg-animations"></div>
@@ -18,12 +18,10 @@
       <button id="retrieveBtn" class="btn retrieve-btn">Retrieve</button>
     </div>
 
-    <!-- A box to show success/loading/error messages -->
     <div id="messageBox" class="notification hidden">
       <pre id="output"></pre>
     </div>
 
-    <!-- "Is this you?" container -->
     <div id="playerCheckContainer" class="player-check hidden">
       <p id="playerInfoP" class="player-info"></p>
       <p class="question">Is this you?</p>
@@ -33,10 +31,10 @@
       </div>
     </div>
 
-    <!-- Final gradient data container -->
+    <!-- Notice we replaced <pre id="gradientOutput"> with <pre><code> -->
     <div id="gradientContainer" class="gradient-data hidden">
       <h2>Gradient Data</h2>
-      <pre id="gradientOutput" class="pretty-box"></pre>
+      <pre><code id="gradientOutput" class="code-block"></code></pre>
     </div>
   </div>
 </body>
