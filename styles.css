@@ -1,18 +1,17 @@
-/* 1) Basic reset */
+/* 1) Reset */
 * {
-  margin: 0;
-  padding: 0;
+  margin: 0; 
+  padding: 0; 
   box-sizing: border-box;
 }
-
 html, body {
   width: 100%;
   height: 100%;
   font-family: "Open Sans", sans-serif;
-  overflow: hidden;
+  overflow: hidden; /* We'll handle scrolling in .main-container if needed */
 }
 
-/* 2) Animated gradient background */
+/* 2) Animated background */
 .bg-animations {
   position: fixed;
   top: 0; left: 0;
@@ -33,7 +32,7 @@ html, body {
   100% { background-position: 0% 50%; }
 }
 
-/* 3) Main container */
+/* 3) Main container for content */
 .main-container {
   position: relative;
   display: flex;
@@ -46,7 +45,7 @@ html, body {
   overflow-y: auto;
 }
 
-/* Title + subtitle */
+/* Title and subtitle fade in */
 h1 {
   color: #fff;
   margin-bottom: 8px;
@@ -60,8 +59,6 @@ h1 {
   opacity: 0;
   transform: translateY(-10px);
 }
-
-/* Fade-in animation for titles, etc. */
 @keyframes fadeInUp {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -69,7 +66,7 @@ h1 {
   animation: fadeInUp 1s forwards;
 }
 
-/* 4) Input row + button */
+/* 4) Input row */
 .input-row {
   display: flex;
   align-items: center;
@@ -107,7 +104,7 @@ h1 {
   box-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
-/* 6) Notification box (for success/loading/error) */
+/* 6) Notification box (for success/error/loading) */
 .notification {
   width: 90%;
   max-width: 500px;
@@ -124,18 +121,16 @@ h1 {
   opacity: 0;
   transform: translateY(-20px);
 }
-
-/* Hidden by default */
-.hidden {
-  display: none;
-}
-
-/* Slide-in animation */
 @keyframes fadeSlideIn {
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Hide by default */
+.hidden {
+  display: none;
 }
 
 /* 7) "Is this you?" container */
@@ -151,7 +146,7 @@ h1 {
   text-align: center;
   animation: fadeSlideIn 0.6s ease forwards;
   opacity: 0;
-  transform: translateY(-20px;
+  transform: translateY(-20px);
 }
 .player-info {
   margin: 10px 0;
@@ -168,13 +163,14 @@ h1 {
   gap: 10px;
 }
 
-/* 8) Final gradient data container */
-.gradient-data {
+/* 8) Final gradient container */
+.gradient-container {
+  margin-top: 20px;
   width: 90%;
   max-width: 500px;
   background: rgba(255,255,255,0.15);
   border: 1px solid rgba(255,255,255,0.4);
-  border-radius: 6px;
+  border-radius: 5px;
   padding: 15px;
   color: #fff;
   text-align: left;
@@ -182,46 +178,18 @@ h1 {
   opacity: 0;
   transform: translateY(-20px);
 }
-.gradient-data h2 {
+.gradient-container h2 {
   margin-bottom: 10px;
 }
+/* The <pre> for raw data */
 #gradientOutput {
-  font-family: monospace;
   white-space: pre-wrap;
-  font-size: 14px;
+  font-family: monospace;
   margin: 0;
-}
-
-.pretty-box {
-  background: rgba(0,0,0,0.1); /* slight overlay color behind text */
-  border: 1px solid rgba(0,0,0,0.2);
-  padding: 10px;
-  font-family: "Courier New", monospace;
   font-size: 14px;
-  white-space: pre;
-  overflow: auto;         /* allows scrolling if content is large */
-  max-height: 400px;      /* limit vertical size */
-  line-height: 1.4;
 }
 
-/* 1) A nice dark code box style */
-.code-block {
-  display: block;
-  background: #2d2d2d;    /* or #1e1e1e, etc. */
-  color: #ccc;            /* text color */
-  padding: 12px;
-  border-radius: 5px;
-  font-family: "Courier New", monospace; 
-  font-size: 14px;
-  line-height: 1.4;
-  white-space: pre;       /* preserve spacing */
-  overflow-x: auto;       /* horizontal scroll if needed */
-  max-height: 400px;      /* limit vertical growth, becomes scrollable if huge */
-  margin: 0;              /* remove default <code> or <pre> margin */
-}
-
-
-/* 9) Optional "pulse" effect you can add in JS if you want to highlight something */
+/* 9) Optional "pulse" effect */
 @keyframes pulse {
   0%   { box-shadow: 0 0 0px 0 rgba(255,255,255,0.7); }
   50%  { box-shadow: 0 0 15px 5px rgba(255,255,255,0.3); }
