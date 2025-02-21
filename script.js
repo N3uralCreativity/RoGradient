@@ -10,6 +10,9 @@ const noBtn = document.getElementById("noBtn");
 const gradientContainer = document.getElementById("gradientContainer");
 const gradientOutput = document.getElementById("gradientOutput");
 
+// Copy button
+const copyBtn = document.getElementById("copyBtn");
+
 // JSONbin v3 "b" route
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
 
@@ -62,11 +65,13 @@ retrieveBtn.addEventListener("click", async () => {
     playerCheckContainer.classList.remove("hidden");
 
     yesBtn.onclick = () => {
-      // Just show raw data
       gradientOutput.textContent = gradientData;
       showMessage("Successfully loaded data from Database...");
       gradientContainer.classList.remove("hidden");
       playerCheckContainer.classList.add("hidden");
+
+      // Unhide the copy button now that we have data
+      copyBtn.classList.remove("hidden");
     };
 
     noBtn.onclick = () => {
@@ -90,6 +95,9 @@ function resetUI() {
 
   gradientContainer.classList.add("hidden");
   gradientOutput.textContent = "";
+
+  // Also hide the copy button initially
+  copyBtn.classList.add("hidden");
 }
 
 /** Show a success/loading message in the box */
@@ -107,3 +115,15 @@ function showError(msg) {
   messageBox.classList.add("error");
   output.textContent = msg;
 }
+
+/** Copy Data button logic */
+copyBtn.addEventListener("click", () => {
+  const dataToCopy = gradientOutput.textContent;
+  navigator.clipboard.writeText(dataToCopy)
+    .then(() => {
+      showMessage("Gradient data copied to clipboard!");
+    })
+    .catch(err => {
+      showError("Failed to copy: " + err);
+    });
+});
