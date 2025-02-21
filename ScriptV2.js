@@ -1,113 +1,107 @@
-const retrieveBtn = document.getElementById("retrieveBtn");
+// Récup des éléments
 const binIdInput = document.getElementById("binIdInput");
+const retrieveBtn = document.getElementById("retrieveBtn");
 
-
-const messageBox = document.getElementById("messageBox");
-const output = document.getElementById("output");
-
+const notificationBox = document.getElementById("notificationBox");
+const notificationText = document.getElementById("notificationText");
 
 const playerCheckContainer = document.getElementById("playerCheckContainer");
-const playerInfoP = document.getElementById("playerInfoP");
+const playerNameSpan = document.getElementById("playerNameSpan");
+const playerIdSpan = document.getElementById("playerIdSpan");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 
 const gradientContainer = document.getElementById("gradientContainer");
 const gradientOutput = document.getElementById("gradientOutput");
 
-
-// JSONbin v3 "b" route
-const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
-
-retrieveBtn.addEventListener("click", async () => {
+// Ecouteur du bouton "Récupérer"
+retrieveBtn.addEventListener("click", () => {
   resetUI();
-
+  
   const binId = binIdInput.value.trim();
   if (!binId) {
-    showError("Please enter a Bin ID!");
+    showNotification("Veuillez entrer un ID de bin valide.", true);
     return;
   }
 
-  showMessage("Loading data from JSONbin...");
-  try {
-    const url = `${JSONBIN_BASE_URL}${encodeURIComponent(binId)}`;
-    const resp = await fetch(url);
-    if (!resp.ok) {
-      showError(`Error: bin not found or server error. (Status ${resp.status})`);
+  // Affiche un message de chargement
+  showNotification("Chargement en cours...");
+
+  // Simule un fetch asynchrone
+  fetchSimulation(binId).then((record) => {
+    if (!record) {
+      showNotification("Erreur : Bin introuvable ou vide.", true);
       return;
     }
+    // record = { playerName, playerId, gradientData }
+    showNotification("Données trouvées !", false);
 
-    const json = await resp.json();
-    console.log("JSONbin response:", json);
-
-    if (!json.record) {
-      showError("No 'record' field in returned JSON.");
-      return;
-    }
-
-    // We expect record = { playerName, playerId, gradientData }
-    const record = json.record;
-    const playerName = record.playerName;
-    const playerId = record.playerId;
-    const gradientData = record.gradientData;
-
-    if (playerName === undefined) {
-      showError("No 'playerName' found in record. Can't identify player.");
-      return;
-    }
-    if (playerId === undefined) {
-      showError("No 'playerId' found in record. Can't identify player.");
-      return;
-    }
-    if (gradientData === undefined) {
-      showError("No 'gradientData' found in the record.");
-      return;
-    }
-
-    // Show "Is this you?" 
-    playerInfoP.textContent = `Name: ${playerName}\nID: ${playerId}`;
+    // Affiche la zone "Is this you ?"
+    playerNameSpan.textContent = record.playerName;
+    playerIdSpan.textContent = record.playerId;
     playerCheckContainer.classList.remove("hidden");
 
+    // Si "Oui"
     yesBtn.onclick = () => {
-      gradientOutput.textContent = gradientData;
+      gradientOutput.textContent = record.gradientData;
       gradientContainer.classList.remove("hidden");
       playerCheckContainer.classList.add("hidden");
     };
-
+    // Si "Non"
     noBtn.onclick = () => {
-      showError("You indicated this is not your gradient. Exiting display.");
+      showNotification("Vous avez indiqué que ce n'était pas vous. Fin.", true);
       playerCheckContainer.classList.add("hidden");
     };
 
-  } catch (err) {
-    showError("Network or fetch error:\n" + err);
-    console.error(err);
-  }
+  }).catch((err) => {
+    showNotification("Erreur de fetch : " + err, true);
+  });
 });
 
-/** Clears old states */
+/**
+ * Montre une notification (msg) en retirant `.hidden`.
+ * Si error = true, on peut styliser différemment (ou juste le texte).
+ */
+function showNotification(msg, error = false) {
+  notificationBox.classList.remove("hidden");
+  notificationText.textContent = msg;
+  // Si on veut un style rouge en cas d'erreur, on peut changer le background
+  if (error) {
+    notificationBox.style.backgroundColor = "rgba(244, 67, 54, 0.4)"; // rouge
+  } else {
+    notificationBox.style.backgroundColor = "rgba(255,255,255,0.15)"; // normal
+  }
+}
+
+/**
+ * Réinitialise l'UI avant un nouveau fetch.
+ */
 function resetUI() {
-  messageBox.classList.add("hidden");
-  output.textContent = "";
-
+  notificationBox.classList.add("hidden");
   playerCheckContainer.classList.add("hidden");
-  playerInfoP.textContent = "";
-
   gradientContainer.classList.add("hidden");
+  notificationBox.style.backgroundColor = "rgba(255,255,255,0.15)";
+  notificationText.textContent = "";
   gradientOutput.textContent = "";
 }
 
-/** Show a success/loading message in the box */
-function showMessage(msg) {
-  messageBox.classList.remove("hidden");
-  messageBox.classList.remove("error");
-  messageBox.classList.add("success");
-  output.textContent = msg;
-}
-
-/** Show an error message in the box */
-function showError(msg) {
-  messageBox.classList.remove("hidden");
-  messageBox.classList.remove("success");
-  messageBox.classList.add("error");
-  output.textContent = msg;
+/**
+ * Simulation d'appel réseau. Au lieu de fetch JSONbin, on simule un record.
+ * Tu pourras remplacer cette fonction par un vrai fetch(...) 
+ * vers "https://api.jsonbin.io/v3/b/" + binId
+ */
+function fetchSimulation(binId) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      if (binId === "erreur") {
+        resolve(null); // simule une erreur
+      } else {
+        resolve({
+          playerName: "MonJoueur",
+          playerId: 123456,
+          gradientData: "Ceci est un texte de gradient JSON simulé..."
+        });
+      }
+    }, 1500); // 1,5 s de "chargement"
+  });
 }
