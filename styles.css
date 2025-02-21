@@ -1,4 +1,4 @@
-/* Remise à zéro basique */
+/* 1) Basic reset */
 * {
   margin: 0;
   padding: 0;
@@ -11,7 +11,7 @@ html, body {
   overflow: hidden;
 }
 
-/* Arrière-plan animé */
+/* 2) Animated gradient background */
 .bg-animations {
   position: fixed;
   top: 0; left: 0;
@@ -32,7 +32,7 @@ html, body {
   100% { background-position: 0% 50%; }
 }
 
-/* Conteneur principal */
+/* 3) Main container */
 .main-container {
   position: relative;
   display: flex;
@@ -45,7 +45,7 @@ html, body {
   overflow-y: auto;
 }
 
-/* Titres + sous-titre */
+/* Title + subtitle */
 h1 {
   color: #fff;
   margin-bottom: 8px;
@@ -60,7 +60,7 @@ h1 {
   transform: translateY(-10px);
 }
 
-/* Animations "fade-in" */
+/* Fade-in animation for titles, etc. */
 @keyframes fadeInUp {
   to { opacity: 1; transform: translateY(0); }
 }
@@ -68,7 +68,7 @@ h1 {
   animation: fadeInUp 1s forwards;
 }
 
-/* Ligne input + bouton */
+/* 4) Input row + button */
 .input-row {
   display: flex;
   align-items: center;
@@ -76,7 +76,6 @@ h1 {
   margin-bottom: 24px;
   opacity: 0;
   transform: translateY(-10px);
-  /* On peut réutiliser fadeInUp en "animation: fadeInUp 1s forwards" si on veut */
   animation: fadeInUp 1s forwards;
   animation-delay: 0.5s;
 }
@@ -91,7 +90,7 @@ h1 {
   background-color: #ff9900;
 }
 
-/* Style général des boutons */
+/* 5) General button styling */
 .btn {
   padding: 10px 16px;
   font-size: 15px;
@@ -107,7 +106,7 @@ h1 {
   box-shadow: 0 0 10px rgba(255,255,255,0.4);
 }
 
-/* Notification box (loading/erreur/etc.) */
+/* 6) Notification box (for success/loading/error) */
 .notification {
   width: 90%;
   max-width: 500px;
@@ -125,12 +124,12 @@ h1 {
   transform: translateY(-20px);
 }
 
-/* Is hidden by default (display: none). */
+/* Hidden by default */
 .hidden {
   display: none;
 }
 
-/* Animation pour notification, "slide-in" */
+/* Slide-in animation */
 @keyframes fadeSlideIn {
   to {
     opacity: 1;
@@ -138,7 +137,7 @@ h1 {
   }
 }
 
-/* "Is this you ?" container */
+/* 7) "Is this you?" container */
 .player-check {
   width: 90%;
   max-width: 400px;
@@ -151,10 +150,11 @@ h1 {
   text-align: center;
   animation: fadeSlideIn 0.6s ease forwards;
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(-20px;
 }
 .player-info {
   margin: 10px 0;
+  white-space: pre-wrap;
 }
 .question {
   margin-top: 10px;
@@ -167,7 +167,7 @@ h1 {
   gap: 10px;
 }
 
-/* Final gradient data */
+/* 8) Final gradient data container */
 .gradient-data {
   width: 90%;
   max-width: 500px;
@@ -191,7 +191,7 @@ h1 {
   margin: 0;
 }
 
-/* Petit effet "pulse" */
+/* 9) Optional "pulse" effect you can add in JS if you want to highlight something */
 @keyframes pulse {
   0%   { box-shadow: 0 0 0px 0 rgba(255,255,255,0.7); }
   50%  { box-shadow: 0 0 15px 5px rgba(255,255,255,0.3); }
