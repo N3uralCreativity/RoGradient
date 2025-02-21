@@ -1,23 +1,17 @@
-// EXACT logic from your snippet, in English, referencing the advanced HTML/CSS
-
 const retrieveBtn = document.getElementById("retrieveBtn");
 const binIdInput = document.getElementById("binIdInput");
-
 const messageBox = document.getElementById("messageBox");
 const output = document.getElementById("output");
-
 const playerCheckContainer = document.getElementById("playerCheckContainer");
 const playerInfoP = document.getElementById("playerInfoP");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
-
 const gradientContainer = document.getElementById("gradientContainer");
 const gradientOutput = document.getElementById("gradientOutput");
 
-// JSONbin v3 "b" route 
+// JSONbin v3 "b" route
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
 
-// On clicking "Retrieve"
 retrieveBtn.addEventListener("click", async () => {
   resetUI();
 
@@ -63,12 +57,21 @@ retrieveBtn.addEventListener("click", async () => {
       return;
     }
 
-    // "Is this you?" 
+    // "Is this you?"
     playerInfoP.textContent = `Name: ${playerName}\nID: ${playerId}`;
     playerCheckContainer.classList.remove("hidden");
 
     yesBtn.onclick = () => {
-      gradientOutput.textContent = gradientData;
+      let finalText = gradientData; // fallback
+      // Attempt to parse as JSON & re-stringify
+      try {
+        const parsed = JSON.parse(gradientData);
+        finalText = JSON.stringify(parsed, null, 2); 
+      } catch (e) {
+        // do nothing, just keep gradientData as is
+      }
+
+      gradientOutput.textContent = finalText; 
       showMessage("Successfully loaded data from Database...");
       gradientContainer.classList.remove("hidden");
       playerCheckContainer.classList.add("hidden");
