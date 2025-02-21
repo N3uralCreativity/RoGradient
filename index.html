@@ -7,21 +7,25 @@
   <script defer src="script.js"></script>
 </head>
 <body>
+  <!-- Our animated gradient background -->
   <div class="bg-animations"></div>
 
   <div class="main-container">
     <h1 class="fade-in">Gradient Export Viewer</h1>
     <p class="subtitle fade-in">Enter your Bin ID to retrieve your gradient data.</p>
 
+    <!-- Input + button row -->
     <div class="input-row fade-in">
       <input type="text" id="binIdInput" placeholder="e.g. 63daa..." />
       <button id="retrieveBtn" class="btn retrieve-btn">Retrieve</button>
     </div>
 
+    <!-- Notification box -->
     <div id="messageBox" class="notification hidden">
       <pre id="output"></pre>
     </div>
 
+    <!-- "Is this you?" container -->
     <div id="playerCheckContainer" class="player-check hidden">
       <p id="playerInfoP" class="player-info"></p>
       <p class="question">Is this you?</p>
@@ -31,10 +35,10 @@
       </div>
     </div>
 
-    <!-- Notice we replaced <pre id="gradientOutput"> with <pre><code> -->
-    <div id="gradientContainer" class="gradient-data hidden">
+    <!-- Final gradient data container with a <pre> -->
+    <div id="gradientContainer" class="gradient-container hidden">
       <h2>Gradient Data</h2>
-      <pre><code id="gradientOutput" class="code-block"></code></pre>
+      <pre id="gradientOutput"></pre>
     </div>
   </div>
 </body>
