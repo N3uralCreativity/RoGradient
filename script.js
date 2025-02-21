@@ -2,13 +2,12 @@ const retrieveBtn = document.getElementById("retrieveBtn");
 const binIdInput = document.getElementById("binIdInput");
 const messageBox = document.getElementById("messageBox");
 const output = document.getElementById("output");
+
 const playerCheckContainer = document.getElementById("playerCheckContainer");
 const playerInfoP = document.getElementById("playerInfoP");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const gradientContainer = document.getElementById("gradientContainer");
-
-// We note the final code block element
 const gradientOutput = document.getElementById("gradientOutput");
 
 // JSONbin v3 "b" route
@@ -40,7 +39,7 @@ retrieveBtn.addEventListener("click", async () => {
       return;
     }
 
-    // We expect record = { playerName, playerId, gradientData }
+    // Expect record = { playerName, playerId, gradientData }
     const record = json.record;
     const playerName = record.playerName;
     const playerId = record.playerId;
@@ -59,21 +58,12 @@ retrieveBtn.addEventListener("click", async () => {
       return;
     }
 
-    // "Is this you?"
     playerInfoP.textContent = `Name: ${playerName}\nID: ${playerId}`;
     playerCheckContainer.classList.remove("hidden");
 
     yesBtn.onclick = () => {
-      // Try to parse JSON for pretty print. If not valid JSON, show raw.
-      let finalText = gradientData;
-      try {
-        const parsed = JSON.parse(gradientData);
-        finalText = JSON.stringify(parsed, null, 2); 
-      } catch (e) {
-        // keep it as is if parse fails
-      }
-
-      gradientOutput.textContent = finalText; 
+      // Just show raw data
+      gradientOutput.textContent = gradientData;
       showMessage("Successfully loaded data from Database...");
       gradientContainer.classList.remove("hidden");
       playerCheckContainer.classList.add("hidden");
