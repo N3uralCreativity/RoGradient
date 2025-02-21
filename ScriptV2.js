@@ -7,6 +7,8 @@ const playerInfoP = document.getElementById("playerInfoP");
 const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const gradientContainer = document.getElementById("gradientContainer");
+
+// We note the final code block element
 const gradientOutput = document.getElementById("gradientOutput");
 
 // JSONbin v3 "b" route
@@ -62,13 +64,13 @@ retrieveBtn.addEventListener("click", async () => {
     playerCheckContainer.classList.remove("hidden");
 
     yesBtn.onclick = () => {
-      let finalText = gradientData; // fallback
-      // Attempt to parse as JSON & re-stringify
+      // Try to parse JSON for pretty print. If not valid JSON, show raw.
+      let finalText = gradientData;
       try {
         const parsed = JSON.parse(gradientData);
         finalText = JSON.stringify(parsed, null, 2); 
       } catch (e) {
-        // do nothing, just keep gradientData as is
+        // keep it as is if parse fails
       }
 
       gradientOutput.textContent = finalText; 
