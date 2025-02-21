@@ -203,6 +203,24 @@ h1 {
   max-height: 400px;      /* limit vertical size */
   line-height: 1.4;
 }
+
+/* 1) A nice dark code box style */
+.code-block {
+  display: block;
+  background: #2d2d2d;    /* or #1e1e1e, etc. */
+  color: #ccc;            /* text color */
+  padding: 12px;
+  border-radius: 5px;
+  font-family: "Courier New", monospace; 
+  font-size: 14px;
+  line-height: 1.4;
+  white-space: pre;       /* preserve spacing */
+  overflow-x: auto;       /* horizontal scroll if needed */
+  max-height: 400px;      /* limit vertical growth, becomes scrollable if huge */
+  margin: 0;              /* remove default <code> or <pre> margin */
+}
+
+
 /* 9) Optional "pulse" effect you can add in JS if you want to highlight something */
 @keyframes pulse {
   0%   { box-shadow: 0 0 0px 0 rgba(255,255,255,0.7); }
