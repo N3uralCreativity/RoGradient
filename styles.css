@@ -191,6 +191,17 @@ h1 {
   margin: 0;
 }
 
+.pretty-box {
+  background: rgba(0,0,0,0.1); /* slight overlay color behind text */
+  border: 1px solid rgba(0,0,0,0.2);
+  padding: 10px;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  white-space: pre;
+  overflow: auto;         /* allows scrolling if content is large */
+  max-height: 400px;      /* limit vertical size */
+  line-height: 1.4;
+}
 /* 9) Optional "pulse" effect you can add in JS if you want to highlight something */
 @keyframes pulse {
   0%   { box-shadow: 0 0 0px 0 rgba(255,255,255,0.7); }
