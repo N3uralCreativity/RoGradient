@@ -1,4 +1,4 @@
-# RoGradient
+# RoGradient - Site
 # Roblox Gradient Export Viewer
 
 This repository hosts a **GitHub Pages** site that displays Roblox‐exported gradient data, along with a basic “Is this you?” identity check using a stored player name and user ID. The gradient data is stored in [JSONbin.io](https://jsonbin.io) by a Roblox server script, and retrieved here via an ID.
