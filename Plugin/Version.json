@@ -1,1 +1,10 @@
-
+{
+  "version": "1.0.1",
+  "releaseDate": "2023-09-10T15:30:00Z",
+  "updateMessage": "New features available! Check out the update log below.",
+  "updateLog": [
+    "Improved UI design for a more intuitive experience.",
+    "Fixed issues with the toggle button functionality.",
+    "Optimized performance for faster load times."
+  ]
+}
