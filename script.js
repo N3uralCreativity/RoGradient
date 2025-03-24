@@ -1,129 +1,217 @@
 const retrieveBtn = document.getElementById("retrieveBtn");
 const binIdInput = document.getElementById("binIdInput");
-const messageBox = document.getElementById("messageBox");
-const output = document.getElementById("output");
+const resultSection = document.getElementById("resultSection");
+const infoMessage = document.getElementById("infoMessage");
+const visualContainer = document.getElementById("visualContainer");
+const downloadBtn = document.getElementById("downloadBtn");
 
-const playerCheckContainer = document.getElementById("playerCheckContainer");
-const playerInfoP = document.getElementById("playerInfoP");
-const yesBtn = document.getElementById("yesBtn");
-const noBtn = document.getElementById("noBtn");
-const gradientContainer = document.getElementById("gradientContainer");
-const gradientOutput = document.getElementById("gradientOutput");
-
-// Copy button
-const copyBtn = document.getElementById("copyBtn");
-
-// JSONbin v3 "b" route
 const JSONBIN_BASE_URL = "https://api.jsonbin.io/v3/b/";
 
+window.structuredData = null; // Will hold the object { colorSequence, propsColors, firstColor, lastColor... }
+
+/**************************************************
+ * 1) When you click “Retrieve”
+ **************************************************/
 retrieveBtn.addEventListener("click", async () => {
-  resetUI();
+  visualContainer.innerHTML = "";
+  infoMessage.textContent = "Loading...";
+  resultSection.classList.remove("hidden");
+  downloadBtn.classList.add("hidden");
+  window.structuredData = null;
 
   const binId = binIdInput.value.trim();
-  if (!binId) {
-    showError("Please enter a Bin ID!");
+  if(!binId) {
+    infoMessage.textContent = "Please, enter a Gradient ID.";
     return;
   }
 
-  showMessage("Loading data from JSONbin...");
   try {
     const url = `${JSONBIN_BASE_URL}${encodeURIComponent(binId)}`;
     const resp = await fetch(url);
-    if (!resp.ok) {
-      showError(`Error: bin not found or server error. (Status ${resp.status})`);
+    if(!resp.ok) {
+      infoMessage.textContent = `Error: ID not found or server down. (status ${resp.status})`;
+      return;
+    }
+    const fullJson = await resp.json(); // { record: {...}, metadata: {...} }
+
+    infoMessage.textContent = "Gradient successfully retrieved.";
+    downloadBtn.classList.remove("hidden");
+
+    if(!fullJson.record) {
+      visualContainer.innerHTML = "";
+      infoMessage.textContent = "No 'record' field detected.";
       return;
     }
 
-    const json = await resp.json();
-    console.log("JSONbin response:", json);
-
-    if (!json.record) {
-      showError("No 'record' field in returned JSON.");
+    let gradientData = fullJson.record.gradientData;
+    if(!gradientData) {
+      infoMessage.textContent = "No 'gradientData' in the record.";
       return;
     }
 
-    // Expect record = { playerName, playerId, gradientData }
-    const record = json.record;
-    const playerName = record.playerName;
-    const playerId = record.playerId;
-    const gradientData = record.gradientData;
+    // Convert to a single structure => window.structuredData
+    const isXml = gradientData.trim().startsWith("<root>");
+    let dataObj = null;
 
-    if (playerName === undefined) {
-      showError("No 'playerName' found in record. Can't identify player.\nNote: Data saved before 13/02/2025 are no longer compatible.");
-      return;
-    }
-    if (playerId === undefined) {
-      showError("No 'playerId' found in record. Can't identify player.\nNote: Data saved before 13/02/2025 are no longer compatible.");
-      return;
-    }
-    if (gradientData === undefined) {
-      showError("No 'gradientData' found in the record.\nPossible solutions:\n - Check that you have the correct ID.\n - Try exporting again and generating a new ID.\nIf the problem persists, contact the developer.");
-      return;
+    if(isXml) {
+      infoMessage.textContent = "Detected format: XML → converting to structured JSON.";
+      dataObj = parseXmlToObject(gradientData);
+    } else {
+      infoMessage.textContent = "Detected format: JSON → direct parsing.";
+      dataObj = parseJsonToObject(gradientData);
     }
 
-    playerInfoP.textContent = `Name: ${playerName}\nID: ${playerId}`;
-    playerCheckContainer.classList.remove("hidden");
+    if(!dataObj) {
+      infoMessage.textContent = "Unable to parse/convert into JSON structure.";
+      return;
+    }
 
-    yesBtn.onclick = () => {
-      gradientOutput.textContent = gradientData;
-      showMessage("Successfully loaded data from Database...");
-      gradientContainer.classList.remove("hidden");
-      playerCheckContainer.classList.add("hidden");
+    // Store the final object
+    window.structuredData = dataObj;
 
-      // Unhide the copy button now that we have data
-      copyBtn.classList.remove("hidden");
-    };
+    // Display the gradient on the page
+    visualizeGradient(dataObj, isXml ? "Gradient (XML→JSON)" : "Gradient (JSON)");
 
-    noBtn.onclick = () => {
-      showError("Failed to prove Identity. Exiting display.");
-      playerCheckContainer.classList.add("hidden");
-    };
-
-  } catch (err) {
-    showError("Network or fetch error:\n" + err);
-    console.error(err);
+  } catch(err) {
+    infoMessage.textContent = "Network/fetch error: " + err;
   }
 });
 
-/** Clears old states */
-function resetUI() {
-  messageBox.classList.add("hidden");
-  output.textContent = "";
+/**************************************************
+ * 2) “Download structured JSON” button
+ **************************************************/
+downloadBtn.addEventListener("click", () => {
+  if(!window.structuredData) {
+    alert("No structured data available ! ");
+    return;
+  }
+  // Serialize to JSON
+  const dataStr = JSON.stringify(window.structuredData, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const blobUrl = URL.createObjectURL(blob);
 
-  playerCheckContainer.classList.add("hidden");
-  playerInfoP.textContent = "";
+  const link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = `gradient_${Date.now()}.json`;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
 
-  gradientContainer.classList.add("hidden");
-  gradientOutput.textContent = "";
+  setTimeout(() => URL.revokeObjectURL(blobUrl), 500);
+});
 
-  // Also hide the copy button initially
-  copyBtn.classList.add("hidden");
+/**************************************************
+ * parseXmlToObject(xmlString)
+ * => we parse the XML, rebuild an object
+ *    { colorSequence: [ {time, color}, ... ],
+ *      propsColors: [ {name, color}, ...],
+ *      firstColor: "...",
+ *      lastColor: "..." }
+ **************************************************/
+function parseXmlToObject(xmlString) {
+  const parser = new DOMParser();
+  const dom = parser.parseFromString(xmlString, "application/xml");
+  const errNode = dom.querySelector("parsererror");
+  if(errNode) {
+    console.warn("Error parsing XML:", errNode.textContent);
+    return null;
+  }
+
+  const colorSeqNodes = [...dom.querySelectorAll("colorSequence > keypoint")];
+  const propsNodes    = [...dom.querySelectorAll("propsColors > prop")];
+  const firstC = dom.querySelector("firstColor")?.textContent?.trim() || null;
+  const lastC  = dom.querySelector("lastColor")?.textContent?.trim() || null;
+
+  // colorSequence
+  let colorSequence = colorSeqNodes.map(kp => {
+    let t = parseFloat(kp.getAttribute("time")) || 0;
+    let c = kp.getAttribute("color") || "#FFF";
+    return { time: t, color: c };
+  });
+  // propsColors
+  let propsColors = propsNodes.map(pn => {
+    let nm = pn.getAttribute("name") || "??";
+    let col = pn.textContent.trim() || "#FFF";
+    return { name: nm, color: col };
+  });
+
+  colorSequence.sort((a,b) => a.time - b.time);
+
+  return {
+    colorSequence,
+    propsColors,
+    firstColor: firstC,
+    lastColor: lastC
+  };
 }
 
-/** Show a success/loading message in the box */
-function showMessage(msg) {
-  messageBox.classList.remove("hidden");
-  messageBox.classList.remove("error");
-  messageBox.classList.add("success");
-  output.textContent = msg;
+/**************************************************
+ * parseJsonToObject(jsonString)
+ * => we parse the JSON. We expect
+ *    { colorSequence, propsColors, firstColor, lastColor }
+ * => we normalize a bit
+ **************************************************/
+function parseJsonToObject(jsonString) {
+  let obj;
+  try {
+    obj = JSON.parse(jsonString);
+  } catch(err) {
+    console.warn("Error parsing JSON:", err);
+    return null;
+  }
+  if(!obj.colorSequence) obj.colorSequence = [];
+  if(!obj.propsColors)  obj.propsColors = [];
+  if(!obj.firstColor)   obj.firstColor = null;
+  if(!obj.lastColor)    obj.lastColor = null;
+
+  // Sort by time
+  obj.colorSequence.sort((a,b) => (a.time || 0) - (b.time || 0));
+
+  return obj;
 }
 
-/** Show an error message in the box */
-function showError(msg) {
-  messageBox.classList.remove("hidden");
-  messageBox.classList.remove("success");
-  messageBox.classList.add("error");
-  output.textContent = msg;
+/**************************************************
+ * visualizeGradient(dataObj, label)
+ * => dataObj = { colorSequence: [...], propsColors: [...], firstColor, lastColor }
+ * => we build a multi-stop linear-gradient
+ **************************************************/
+function visualizeGradient(dataObj, label) {
+  const colorSeq = dataObj.colorSequence;
+  if(!colorSeq || colorSeq.length === 0) {
+    visualContainer.innerHTML = "No colorSequence to display.";
+    return;
+  }
+
+  const gradientStr = buildMultiStopGradient(colorSeq);
+
+  const box = document.createElement("div");
+  box.classList.add("gradient-box");
+  box.style.background = gradientStr;
+
+  const title = document.createElement("div");
+  title.classList.add("gradient-title");
+  title.textContent = label;
+  box.appendChild(title);
+
+  visualContainer.appendChild(box);
 }
 
-/** Copy Data button logic */
-copyBtn.addEventListener("click", () => {
-  const dataToCopy = gradientOutput.textContent;
-  navigator.clipboard.writeText(dataToCopy)
-    .then(() => {
-      showMessage("Gradient data copied to clipboard!");
-    })
-    .catch(err => {
-      showError("Failed to copy: " + err);
-    });
+/**************************************************
+ * buildMultiStopGradient(kpArray)
+ * => "linear-gradient(to right, #FFF 0%, #CCC 50%, #000 100%)"
+ **************************************************/
+function buildMultiStopGradient(kpArray) {
+  const stops = kpArray.map(kp => {
+    const pct = Math.round(kp.time * 100);
+    return `${kp.color} ${pct}%`;
+  });
+  return `linear-gradient(to right, ${stops.join(", ")})`;
+}
+
+// On cible le bouton du footer
+const apiStatusBtn = document.getElementById("apiStatusBtn");
+apiStatusBtn.addEventListener("click", () => {
+  // Redirige l’utilisateur vers la page de statut
+  // Ici on ouvre dans un nouvel onglet
+  window.open("https://status.jsonbin.io/", "_blank");
 });
